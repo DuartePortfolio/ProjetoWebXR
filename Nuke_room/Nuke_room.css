@@ -1,0 +1,17 @@
+#country-select {
+    position: absolute;
+    z-index: 1;
+    top: 10px;
+    left: 10px;
+}
+
+#info-box{
+    position: absolute;
+    z-index: 1;
+    top: 10px;
+    right: 10px;
+    background-color: grey;
+    padding: 10px;
+    color: white;
+    font-size: small;
+}
