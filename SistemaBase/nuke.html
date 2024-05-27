@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <link rel="stylesheet" href="nuke.css">
+</head>
+<body>
+    <a-scene>
+        <a-assets>
+            <a-asset-item id="nuke" src="nuke_model.glb"></a-asset-item>
+        </a-assets>
+
+        <a-entity id="nuke-model" gltf-model="#nuke" position="0 -1 -2" scale="1 1 1"></a-entity>
+
+        <a-entity camera wasd-controls look-controls position="0 1.6 25"></a-entity>
+
+        <a-sky color="#ADD8E6"></a-sky>
+    </a-scene>
+
+    <img id="country-flag" src="#country-flag" alt="">
+
+    <!-- Dropdown list to select country -->
+    <select id="country-select">
+        <option value="israel">Israel</option>
+        <option value="coreiadonorte">Coreia do Norte</option>
+        <option value="paquistao">Paquistao</option>
+        <option value="india">India</option>
+        <option value="china">China</option>
+        <option value="franca">Franca</option>
+        <option value="reinounido">Reino Unido</option>
+        <option value="russia">Russia</option>
+        <option value="estadosunidos">Estados Unidos</option>
+        <option value="escala">Escala</option>
+    </select>
+
+>
+    <div id="info-box" style="background-color: grey; padding: 10px;">
+        <h1>Poder explosivo total: <span id="tons"></span> toneladas</h1> <br>
+        <h1>Tamanho à escala: <span id="size"></span>m^2</h1> <br>
+        <h1>Total de armas nucleares:  <span id="amount"></span></h1>
+    </div>
+
+    <script>
+        // Map of countries to number of nukes
+        var nukesByCountry = {
+            'israel': 80,
+            'coreiadonorte': 20,
+            'paquistao': 140,
+            'india': 130,
+            'china': 260,
+            'franca': 290,
+            'reinounido': 120,
+            'russia': 1600,
+            'estadosunidos': 1600,
+            'escala': 1
+        };
+
+        var flagsByCountry = {
+            'israel': './israel.png',
+            'coreiadonorte': './coreiadonorte.png',
+            'paquistao': './paquistao.svg',
+            'india': './india.png',
+            'china': './china.png',
+            'franca': './franca.png',
+            'reinounido': './reinounido.png',
+            'russia': './russia.png',
+            'estadosunidos': './estadosunidos.png'
+        }
+
+
+
+
+        var nukeModel = document.querySelector('#nuke-model');
+        var flagImage = document.querySelector('#country-flag');
+        var imgElement = document.createElement('img');
+        var countrySelect = document.querySelector('#country-select');
+        var tonsText = document.querySelector('#tons');
+        var totalSizeText = document.querySelector('#size');
+        var amountText = document.querySelector('#amount');
+
+        function updateNuke() {
+
+            var currentCountry = countrySelect.value;
+
+            var numberOfNukes = nukesByCountry[currentCountry];
+
+            var scale = Math.log(numberOfNukes) / Math.log(10);
+
+            nukeModel.setAttribute('scale', {x: scale, y: scale, z: scale});
+
+            flagImage.setAttribute('src', flagsByCountry[currentCountry]);
+
+            var tons = numberOfNukes * 500000;
+            var tonsInExponential = tons.toExponential().split('e');
+            tonsText.innerText = `${tonsInExponential[0]} x 10^${tonsInExponential[1]}`;
+            amountText.innerText = numberOfNukes;   
+
+            var totalSize = Math.floor(numberOfNukes * 8.2);
+            totalSizeText.innerText = totalSize;
+        }
+
+        countrySelect.addEventListener('change', updateNuke);
+
+
+        updateNuke();
+    </script>
+</body>
+</html>
